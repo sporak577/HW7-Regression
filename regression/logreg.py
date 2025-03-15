@@ -186,4 +186,11 @@ class LogisticRegressor(BaseRegressor):
         Returns: 
             Vector of gradients.
         """
+        #compute predicted probs
+        y_pred = self.make_prediction(X) #sigmoid(X @ W)
+
+        #compute gradient 
+        grad = np.dot(X.T, (y_pred - y_true)) / X.shape[0]
+
+        return grad
         pass
