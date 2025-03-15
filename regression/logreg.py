@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""
+as always I am using ChatGPT to help me understand the code and implement it
+"""
 # Base class for generic regressor
 # (this is already complete!)
 class BaseRegressor():
