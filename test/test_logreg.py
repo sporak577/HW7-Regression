@@ -22,9 +22,9 @@ def setup_model():
 	"""
 
 	X = np.array([
-	[1, 2.0, 3.0], #bias term is included
-	[1, 1.0, 1.5],
-	[1, 2.5, 2.0]
+	[2.0, 3.0], 
+	[1.0, 1.5],
+	[2.5, 2.0]
 	])
 
 	y = np.array([1, 0, 1]) #true labels
@@ -41,7 +41,8 @@ def test_prediction(setup_model):
 	test if make_prediction correcly computes probabilities between 0 and 1. 
 	"""
 	model, X, _ = setup_model
-	y_pred = model.make_prediction(X)
+	X_bias = np.hstack([X, np.ones((X.shape[0], 1))])
+	y_pred = model.make_prediction(X_bias)
 	
 	assert np.all(y_pred >= 0) and np.all(y_pred <= 1) #probs should be between 0 and 1, as this is logistic regression. 
 
@@ -51,7 +52,8 @@ def test_loss_function(setup_model):
 	test if loss_function correctly computes binary cross-entropy loss. 
 	"""
 	model, X, y_true = setup_model
-	y_pred = model.make_prediction(X)
+	X_bias = np.hstack([X, np.ones((X.shape[0], 1))])
+	y_pred = model.make_prediction(X_bias)
 	loss = model.loss_function(y_true, y_pred)
 
 	epsilon = 1e-8 #to avoid log0
@@ -64,13 +66,17 @@ def test_gradient(setup_model):
 	test if the calculate_gradient correctly computes the gradient
 	"""
 	model, X, y_true = setup_model
-	y_pred = model.make_prediction(X)
-	computed_grad = model.calculate_gradient(y_true, X)
+
+	#add bias explicitly 
+	X_bias = np.hstack([X, np.ones((X.shape[0],1))])
+
+	y_pred = model.make_prediction(X_bias)
+	computed_grad = model.calculate_gradient(y_true, X_bias)
 
 	#manually computed expected gradient
-	expected_grad = np.dot(X.T, (y_pred - y_true)) / X.shape[0]
+	expected_grad = np.dot(X_bias.T, (y_pred - y_true)) / X_bias.shape[0]
 
-	np.testing.assert_array_almost_equal(computed_grad, expected_grad, decimal=5, err_msg="Gradient calculation is incorrect.")
+	np.testing.assert_array_almost_equal(computed_grad, expected_grad, decimal=5)
 	
 
 def test_training(setup_model):
