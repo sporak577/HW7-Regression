@@ -46,7 +46,7 @@ def test_prediction(setup_model):
 	assert np.all(y_pred >= 0) and np.all(y_pred <= 1) #probs should be between 0 and 1, as this is logistic regression. 
 
 
-def test_loss_function():
+def test_loss_function(setup_model):
 	"""
 	test if loss_function correctly computes binary cross-entropy loss. 
 	"""
@@ -59,7 +59,7 @@ def test_loss_function():
 
 	assert np.isclose(loss, expected_loss, atol=1e-5)
 
-def test_gradient():
+def test_gradient(setup_model):
 	"""
 	test if the calculate_gradient correctly computes the gradient
 	"""
@@ -73,7 +73,7 @@ def test_gradient():
 	np.testing.assert_array_almost_equal(computed_grad, expected_grad, decimal=5, err_msg="Gradient calculation is incorrect.")
 	
 
-def test_training():
+def test_training(setup_model):
 	"""
 	test if train_model updates weights correctly after one step. 
 	"""
