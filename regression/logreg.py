@@ -153,7 +153,7 @@ class LogisticRegressor(BaseRegressor):
         #self.W is an (n + 1) x 1 weight vector. 
         #the result is a vector of shape m x 1 containing the linear combination of features and weights. 
         return self.sigmoid(X @ self.W)
-        pass
+        
     
     def loss_function(self, y_true, y_pred) -> float:
         """
@@ -193,4 +193,4 @@ class LogisticRegressor(BaseRegressor):
         grad = np.dot(X.T, (y_pred - y_true)) / X.shape[0]
 
         return grad
-        pass
+        
