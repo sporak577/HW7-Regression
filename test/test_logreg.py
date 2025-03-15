@@ -61,8 +61,26 @@ def test_loss_function():
 
 def test_gradient():
 	"""
+	test if the calculate_gradient correctly computes the gradient
 	"""
-	pass
+	model, X, y_true = setup_model
+	y_pred = model.make_prediction(X)
+	computed_grad = model.calculate_gradient(y_true, X)
+
+	#manually computed expected gradient
+	expected_grad = np.dot(X.T, (y_pred - y_true)) / X.shape[0]
+
+	np.testing.assert_array_almost_equal(computed_grad, expected_grad, decimal=5, err_msg="Gradient calculation is incorrect.")
+	
 
 def test_training():
-	pass
+	"""
+	test if train_model updates weights correctly after one step. 
+	"""
+	model, X, y_true = setup_model
+	initial_W = model.W.copy()
+
+	#train for one iteration
+	model.train_model(X, y_true, X, y_true) #using same data for validation
+
+	assert not np.array_equal(initial_W, model.W) #weights should be uppdated after training
