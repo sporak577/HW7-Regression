@@ -172,7 +172,7 @@ class LogisticRegressor(BaseRegressor):
         #we add epsilon to avoid numerical instability, as the log of 0 is undefined. log(0) = -inf, since ypred can be very close to zero or 1, adding epsilon
         #prevents computation errors. 
         loss = -np.mean(y_true * np.log(y_pred + epsilon) + (1 - y_true) * np.log(1 - y_pred + epsilon))
-        pass
+        return loss
         
     def calculate_gradient(self, y_true, X) -> np.ndarray:
         """
