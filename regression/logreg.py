@@ -116,6 +116,20 @@ class LogisticRegressor(BaseRegressor):
             max_iter=max_iter,
             batch_size=batch_size
         )
+
+    def sigmoid(self, z):
+        """
+        Implements the sigmoid activation function.
+        Sigmoid function maps real-valued numbers into the range(0,1).
+        
+        Arguments:
+        z (np.ndarray) : input values
+        
+        returns:
+        sigmoid transformed values
+        """
+
+        return 1 / (1 + np.exp(-z))
     
     def make_prediction(self, X) -> np.array:
         """
@@ -123,12 +137,19 @@ class LogisticRegressor(BaseRegressor):
         function is a transformation of the linear model into an "S-shaped" curve that can be used
         for binary classification.
 
+        computes the probability estimates using the logistic function
+
         Arguments: 
             X (np.ndarray): Matrix of feature values.
 
         Returns: 
             The predicted labels (y_pred) for given X.
         """
+        #this represent matrix-vector multiplication in python. np.dot == @
+        #X is an m x (n + 1) matrix where m is the number of samples and n + 1 includes the bias term.
+        #self.W is an (n + 1) x 1 weight vector. 
+        #the result is a vector of shape m x 1 containing the linear combination of features and weights. 
+        return self.sigmoid(X @ self.W)
         pass
     
     def loss_function(self, y_true, y_pred) -> float:
@@ -143,6 +164,11 @@ class LogisticRegressor(BaseRegressor):
         Returns: 
             The mean loss (a single number).
         """
+        epsilon = 1e-8 
+        #np.mean() function automaticaly sums over all samples and divides by the total number of samples N, ensures return of average loss per sample
+        #we add epsilon to avoid numerical instability, as the log of 0 is undefined. log(0) = -inf, since ypred can be very close to zero or 1, adding epsilon
+        #prevents computation errors. 
+        loss = -np.mean(y_true * np.log(y_pred + epsilon) + (1 - y_true) * np.log(1 - y_pred + epsilon))
         pass
         
     def calculate_gradient(self, y_true, X) -> np.ndarray:
